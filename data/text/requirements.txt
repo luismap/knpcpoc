@@ -1,0 +1,36 @@
+#core api
+fastapi
+uvicorn[standard]
+PyYAML
+pydantic
+pydantic[email]
+psycopg[binary]
+psycopg2
+SQLAlchemy
+pytest
+pytest-cov
+pytest-notimplemented
+coverage
+black
+mypy
+lint
+passlib
+python-jose[cryptography]
+#genai
+streamlit==1.28.1
+langchain
+chromadb==0.3.29
+transformers
+datasets
+torch==2.0.1
+accelerate
+sentence-transformers
+bitsandbytes
+faiss-gpu
+#langchain currently need this
+typing-inspect==0.8.0
+typing_extensions==4.5.0
+#endlangchain
+beautifulsoup4
+#for audio
+librosa

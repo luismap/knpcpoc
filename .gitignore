@@ -1,0 +1,17 @@
+__pycache__/
+
+.DS_STORE
+
+log/*
+.ipynb_checkpoints
+*ipynb*
+.env
+
+#misc
+.coverage
+fast_api
+notes/*
+whereIamnowVid.txt
+#chroma
+chroma.sqlite3
+*.bin

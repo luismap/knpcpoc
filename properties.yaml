@@ -1,0 +1,16 @@
+---
+#postgres info
+postgres:
+  posts:
+    db: mydb
+    table: mytable
+
+#general
+general:
+  app:
+    env: dev #dev/test/uat/prod
+    logger: llm-dev
+
+#local store
+localStore:
+  dbFileName: test/post_fixtures.txt
