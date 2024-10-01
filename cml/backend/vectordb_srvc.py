@@ -1,9 +1,9 @@
-from core.vectordbs.MyChroma import MyChroma
 import sys
 
 __import__("pysqlite3")
 sys.modules["sqlite3"] = sys.modules.pop("pysqlite3")
 
+from core.vectordbs.MyChroma import MyChroma
 
 mycvdb = MyChroma()
 
