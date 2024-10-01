@@ -31,3 +31,7 @@ sentence_transformers
 
 #umap
 umap-learn
+
+#huggingface
+transformers
+torch==2.0.1

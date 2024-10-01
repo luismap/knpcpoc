@@ -1,0 +1,4 @@
+#huggingface
+sentence_transformers
+transformers
+torch==2.0.1
