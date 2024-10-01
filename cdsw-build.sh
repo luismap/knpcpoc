@@ -18,5 +18,15 @@
 # This file must be moved to the project's root
 # directory for CML to detect it
 #cloudera build uses pip3
-pip3 install -U -r requirements.txt
+if [[ $srvc_type = "vdb" ]]
+then
+    echo "installing for $srvc_type"
+    pip3 install -U -r requirements_chroma.txt
+elif [[ $srvc_type = "reranker" ]]
+then
+    echo "installing for $srvc_type"
+else
+    echo "could not parse/or find env var srvc_type"
+fi
+#pip3 install -U -r requirements.txt
 #Rscript -e "install.packages(repos='https://cloud.r-project.org', c('readr', 'rsample', 'parsnip', 'yardstick'))"
