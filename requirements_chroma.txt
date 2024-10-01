@@ -1,7 +1,13 @@
 #chroma
 chromadb==0.4.15
-pysqlite3-binary==0.5.2.post1
+#pysqlite3-binary==0.5.2.post1
 sentence_transformers
+pypdf
+
+#langchain
+langchain
+langchain_community
+langchain_chroma
 pypdf
 
 #umap
