@@ -17,8 +17,8 @@ class ChatHistory:
     def add_history(self, user_id: str, question: str, ai_response: Dict[str, str]):
         if user_id not in self._users:
             self.add_user(user_id)
-        question_parse = {"role": "user", "content": question}
-        self._history[user_id].append(question_parse)
+        # question_parse = {"role": "user", "content": question}
+        # self._history[user_id].append(question_parse)
         self._history[user_id].append(ai_response)
 
     def get_history(self, user_id: str) -> List[Dict[str, str]]:
