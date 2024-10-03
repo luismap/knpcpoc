@@ -45,7 +45,11 @@ def vdb_query(args):
         include=["metadatas", "documents", "distances", "embeddings"],
     )
     if return_embeddings == 0:
-        rsp = {"docs": responses["documents"], "metas": responses["metadatas"]}
+        rsp = {
+            "ids": responses["ids"],
+            "docs": responses["documents"],
+            "metas": responses["metadatas"],
+        }
     else:
         rsp = {
             "ids": responses["ids"],
