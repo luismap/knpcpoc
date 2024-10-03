@@ -20,7 +20,7 @@ def vdb_query(args):
     """given a query return a simililarity search on it.
     ex.
     {"question": "hi", "n_results": 3, "embeddings": 1}
-    {"docs": "", "metas": "", "embeddings": ""}
+    {"ids": "","docs": "", "metas": "", "embeddings": ""}
 
     Args:
         args (_type_): _description_
