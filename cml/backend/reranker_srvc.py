@@ -1,0 +1,119 @@
+from typing import List
+import requests
+import json
+import numpy as np
+from core.utils.ModelsCml import get_model_access_key, MODEL_API_URL
+from sentence_transformers import CrossEncoder
+
+AICHAT_SRVC_NAME = "aichat"
+QEXPANSION_SRVC_NAME = "qexpansion"
+VDB_SRVC_NAME = "vdb"
+RERANKER_SRVC_NAME = "reranker"
+
+AICHAT_SRVC_KEY = get_model_access_key(AICHAT_SRVC_NAME)
+QEXPANSION_SRVC_KEY = get_model_access_key(QEXPANSION_SRVC_NAME)
+VDB_SRVC_KEY = get_model_access_key(VDB_SRVC_NAME)
+# RERANKER_SRVC_KEY = "reranker"
+
+cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
+
+def create_context(docs):
+    """given the list unique docs reranked.
+    return a context for the llm
+    """
+
+
+def get_idx_top_rank(scores):
+    rank = np.argsort(scores)[::-1]
+    return rank
+
+
+def get_top_n_docs(ids, unique_docs, n: int = 3):
+    docs = []
+    for i in range(0, n):
+        docs.append(unique_docs[ids[i]])
+    return docs
+
+
+def question_doc_pairs(orginal_question: str, unique_docs):
+    pairs = []
+    for t in unique_docs:
+        pairs.append((orginal_question, t[1]))
+    return pairs
+
+
+def clean_query_list(questions: List[str]) -> List[str]:
+    removed_empty_items = filter(lambda x: x != "", questions)
+    return list(removed_empty_items)
+
+
+def flatten_received_docs(results, embeddings: bool = False):
+    if embeddings:
+        flatten_retrieved_documents = [
+            (idx, doc, meta, embed)
+            for tuples in list(
+                zip(
+                    results["ids"],
+                    results["docs"],
+                    results["metas"],
+                    results["embeddings"],
+                )
+            )
+            for idx, doc, meta, embed in zip(*tuples)
+        ]
+    else:
+        flatten_retrieved_documents = [
+            (idx, doc, meta)
+            for tuples in list(zip(results["ids"], results["docs"], results["metas"]))
+            for idx, doc, meta in zip(*tuples)
+        ]
+    return flatten_retrieved_documents
+
+
+def deduplicated_retrieved_docs(docs):
+    cache = set()
+    flatten_unique_retrieved_documents = []
+
+    for t in docs:
+        if t[0] not in cache:
+            flatten_unique_retrieved_documents.append(t)
+            cache.add(t[0])
+    return flatten_unique_retrieved_documents
+
+
+def rerank(args):
+    query = args["question"]
+
+    # query expansion
+    url_qe = f"{MODEL_API_URL}?accessKey={QEXPANSION_SRVC_KEY}"
+    qe_payload = {"request": {"question": query, "n_gen": 3}}
+    data = json.dumps(qe_payload)
+    headers = {"Content-Type": "application/json"}
+    eq_rsp = requests.post(url_qe, data=data, headers=headers)
+    expanded_query = eq_rsp.json()["response"]["answer"]  # get from expansion srvc
+
+    query_list = clean_query_list(expanded_query.split("\n"))
+    query_list.append(query)
+
+    # docs retrieval
+    url_vdb = f"{MODEL_API_URL}?accessKey={VDB_SRVC_KEY}"
+    vdb_payload = {"request": {"question": query_list, "n_results": 3, "embeddings": 1}}
+    data_vdb = json.dumps(vdb_payload)
+    headers_vdb = {"Content-Type": "application/json"}
+    vdb_rsp = requests.post(url_vdb, data=data_vdb, headers=headers_vdb)
+    docs = vdb_rsp.json()["response"]  # get from expansion srvc
+    # print(docs.keys())
+    # print(docs)
+    print(len(docs))
+    flattened_docs = flatten_received_docs(docs)
+    print(len(flattened_docs))
+    unique_docs = deduplicated_retrieved_docs(flattened_docs)
+    print(len(unique_docs))
+    pairs = question_doc_pairs(query, unique_docs=unique_docs)
+    print(pairs)
+    scores = cross_encoder.predict(pairs)
+    print(scores)
+    best_docs_idx = get_idx_top_rank(scores)
+    best_docs = get_top_n_docs(best_docs_idx, unique_docs)
+    return best_docs
