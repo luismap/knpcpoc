@@ -83,6 +83,15 @@ def deduplicated_retrieved_docs(docs):
 
 
 def rerank(args):
+    """given a question and number of n_gen docs to be create for each query.
+    do query expansion,then rerank and choose the best n docs.
+    return the top n docs
+    ex.
+    {"question": "what is FCA", "n_gen":3, "top_n":4}
+    return a list of.
+    [{"idx": "doc index", "doc": "document", "metadata": "metadat of the document" }]
+
+    """
     query = args["question"]
 
     # query expansion
