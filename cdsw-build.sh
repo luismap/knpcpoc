@@ -22,14 +22,17 @@ if [[ $srvc_type = "vdb" ]]
 then
     echo "installing for $srvc_type"
     pip3 install -U -r requirements_chroma.txt
+
 elif [[ $srvc_type = "reranker" ]]
 then
     echo "installing for $srvc_type"
     pip3 install -U -r requirements_hf.txt
+
 elif [[ $srvc_type = "llm" ]]
 then
     echo "installing for $srvc_type"
     pip3 install -U -r requirements_hf.txt
+    
 elif [[ $srvc_type = "qexpansion" ]]
 then
     echo "installing for $srvc_type"
