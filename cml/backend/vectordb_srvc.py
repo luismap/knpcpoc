@@ -29,4 +29,8 @@ def vdb_query(args):
         include=["metadatas", "documents", "distances", "embeddings"],
     )
 
-    return {"docs": responses["documents"], "metas": responses["metadatas"]}
+    return {
+        "docs": responses["documents"],
+        "metas": responses["metadatas"],
+        "embeddings": responses["embeddings"],
+    }
