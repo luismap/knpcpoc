@@ -32,6 +32,7 @@ def ai_chat(args):
     """will received a payload in the form
     ex.
     {"user_id":"default", "question": "hello"}
+    {"answer": ""}
     and return and asnwer to the question
     """
     user_id = args["user_id"]
