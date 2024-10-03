@@ -13,9 +13,8 @@ CML_CLIENT = cmlapi.default_client(WORKSPACE_DOMAIN, CDSW_APIV2_KEY)
 
 
 def get_model_access_key(model_search_string):
-    model_to_call = CML_CLIENT.list_models(
-        CDSW_PROJECT_ID, search_filter=json.dumps(model_search_string)
-    )
-    MODEL_ACCESS_KEY = model_to_call.models[0].access_key
+    models = CML_CLIENT.list_models(CDSW_PROJECT_ID).models
+    model = list(filter(lambda m: m.name == model_search_string, models))
+    MODEL_ACCESS_KEY = model.access_key
 
     return MODEL_ACCESS_KEY
