@@ -48,6 +48,7 @@ def vdb_query(args):
         rsp = {"docs": responses["documents"], "metas": responses["metadatas"]}
     else:
         rsp = {
+            "ids": responses["ids"],
             "docs": responses["documents"],
             "metas": responses["metadatas"],
             "embeddings": responses["embeddings"],
