@@ -26,7 +26,7 @@ then
 elif [[ $srvc_type = "reranker" ]]
 then
     echo "installing for $srvc_type"
-    pip3 install -U -r requirements_hf.txt
+    pip3 install -U -r requirements_reranker.txt
 
 elif [[ $srvc_type = "llm" ]]
 then
