@@ -8,6 +8,7 @@ log/*
 .env
 
 #misc
+kubeconfig/*
 .coverage
 fast_api
 notes/*
