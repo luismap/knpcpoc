@@ -30,7 +30,9 @@ def query_expansion(args):
     """will received a payload in the form
     ex.
     {"question": "what color is blue", "n_gen": 2}
-    and return and 5 related answer
+    and return and n_gen related questions
+    {"answer": "ans1 ... n_gen"}
+
     """
     question = args["question"]
     try:
