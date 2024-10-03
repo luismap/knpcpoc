@@ -30,6 +30,10 @@ elif [[ $srvc_type = "llm" ]]
 then
     echo "installing for $srvc_type"
     pip3 install -U -r requirements_hf.txt
+elif [[ $srvc_type = "qexpansion" ]]
+then
+    echo "installing for $srvc_type"
+    pip3 install -U -r requirements_hf.txt
 
 else
     echo "could not parse/or find env var srvc_type"
