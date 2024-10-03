@@ -33,17 +33,23 @@ def query_expansion(args):
     and return and 5 related answer
     """
     question = args["question"]
-    n_gen = args["n_gen"]
+    try:
+        n_gen = args["n_gen"]
+    except KeyError:
+        n_gen = 4
+
     messages = [
         {
-            "role": "system",
+            "role": "user",
             "content": f"""You are a helpful expert assistant on the energy sector. Your users are asking questions differents reports.
             Suggest up to {n_gen} additional related questions to help them find the information they need, for the provided question.
             Suggest only short questions without compound sentences. Suggest a variety of questions that cover different aspects of the topic.
             Make sure they are complete questions, and that they are related to the original question.
-            Output one question per line. Do not number the questions.""",
-        },
-        {"role": "user", "content": question},
+            Output one question per line. Do not number the questions.
+            ##Question:
+            {question}
+            """,
+        }
     ]
 
     rsp = pipe(messages)
