@@ -19,7 +19,7 @@ store = mycvdb.load_chroma_docs(pdf_docs, "myknpc11")
 def vdb_query(args):
     """given a query return a simililarity search on it.
     ex.
-    {"question: "hi", "n_results": 3, "embeddings": 1}
+    {"question": "hi", "n_results": 3, "embeddings": 1}
     {"docs": "", "metas": "", "embeddings": ""}
 
     Args:
