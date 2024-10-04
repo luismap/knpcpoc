@@ -27,3 +27,7 @@ def download_job():
     pdf_links = set(filter(lambda e: e.endswith(".pdf"), links))
     for link in list(pdf_links):
         download_file(link, SAVE_FOLDER)
+
+
+if __name__ == "__main__":
+    download_job()
