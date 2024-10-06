@@ -86,16 +86,21 @@ class Reranker:
         do query expansion,then rerank and choose the best n docs.
         return the top n docs
         ex.
-        {"question": "what is FCA", "n_gen":3, "top_n":4}
+        {"question": "what is FCA", "n_gen":3, "n_doc": 3,
+        "top_n":4, "embeddings": 0}
         return a list of.
         [{"idx": "doc index", "doc": "document", "metadata": "metadat of the document" }]
 
         """
         query = args["question"]
+        n_gen = args["n_gen"]
+        n_docs = args["n_doc"]
+        top_n = args["top_n"]
+        embeddings = args["embeddings"]
 
         # query expansion
         url_qe = f"{MODEL_API_URL}?accessKey={self.QEXPANSION_SRVC_KEY}"
-        qe_payload = {"request": {"question": query, "n_gen": 3}}
+        qe_payload = {"request": {"question": query, "n_gen": n_gen}}
         data = json.dumps(qe_payload)
         headers = {"Content-Type": "application/json"}
         eq_rsp = requests.post(url_qe, data=data, headers=headers)
@@ -107,7 +112,11 @@ class Reranker:
         # docs retrieval
         url_vdb = f"{MODEL_API_URL}?accessKey={self.VDB_SRVC_KEY}"
         vdb_payload = {
-            "request": {"question": query_list, "n_results": 3, "embeddings": 1}
+            "request": {
+                "question": query_list,
+                "n_results": n_docs,
+                "embeddings": embeddings,
+            }
         }
         data_vdb = json.dumps(vdb_payload)
         headers_vdb = {"Content-Type": "application/json"}
@@ -125,5 +134,5 @@ class Reranker:
         scores = self.cross_encoder.predict(pairs)
         print(scores)
         best_docs_idx = self.get_idx_top_rank(scores)
-        best_docs = self.get_top_n_docs(best_docs_idx, unique_docs)
+        best_docs = self.get_top_n_docs(best_docs_idx, unique_docs, top_n)
         return best_docs
