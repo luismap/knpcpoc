@@ -1,13 +1,15 @@
 import streamlit as st
 from streamlit_chat import message
 from streamlit.components.v1 import html
-from cml.ui.StreamBot import get_stream_output, generate_inputs
+from StreamBot import StreamBot
 
 st.title("KNPC Bot")
 
 # Initialize chat history
 if "messages" not in st.session_state:
     st.session_state.messages = []
+if "streambot" not in st.session_state:
+    st.session_state.streambot = StreamBot()
 
 # Display chat messages from history on app rerun
 for message in st.session_state.messages:
@@ -33,14 +35,15 @@ chat = [
 
 # React to user input
 if prompt := st.chat_input("What is up?"):
+    stbot = st.session_state.streambot
     # Display user message in chat message container
     text_context = get_current_chat_context()
     with st.chat_message("user"):
         text_context.append({"role": "user", "content": prompt})
         st.markdown(prompt)
     with st.chat_message("assistant"):
-        inputs = generate_inputs(text_context)
-        a = st.write_stream(get_stream_output(inputs))
+        inputs = stbot.generate_inputs(text_context)
+        a = st.write_stream(stbot.get_stream_output(inputs, max_new_tokens=10000))
 
     # Add user message to chat history
     st.session_state.messages.append({"role": "user", "content": prompt})
