@@ -1,0 +1,8 @@
+#streamlit req
+streamlit
+streamlit_chat
+sentence-transformers==3.1.1
+transformers==4.43.2
+torch==2.2.2
+bitsandbytes==0.44.1
+accelerate==0.34.2
